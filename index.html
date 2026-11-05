@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1769E0">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Almoxarifado">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Almoxarifado Manutenção</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="loginScreen" class="login-screen">
+  <div class="login-panel">
+    <div class="brand-mark"><span class="brand-icon">▦</span></div>
+    <div class="brand-title">Almoxarifado <b>Manutenção</b></div>
+    <p class="muted center">Gestão inteligente de materiais</p>
+    <form class="login-card" id="loginForm">
+      <div class="field">
+        <label for="userSelect">E-mail</label>
+        <input id="userSelect" type="email" autocomplete="username" placeholder="seu@email.com">
+      </div>
+      <div class="field">
+        <label for="pinInput">Senha</label>
+        <input id="pinInput" type="password" autocomplete="current-password" placeholder="Sua senha">
+      </div>
+      <button class="btn primary full" id="loginBtn" type="submit">Entrar no aplicativo <span>→</span></button>
+      <p class="login-hint" id="loginHint"></p>
+    </form>
+    <div class="login-foot">Acesso individual · Histórico de movimentações</div>
+  </div>
+</div>
+
+<div id="app" class="app hidden">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand-inline"><span class="brand-icon small">▦</span><div><b>Almoxarifado</b><small>MANUTENÇÃO</small></div></div>
+      <div class="top-actions">
+        <span id="syncStatus" class="sync-status"></span>
+        <button class="icon-btn notification" title="Notificações" aria-label="Notificações" id="notificationBtn"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><i id="notifDot" class="hidden"></i></button>
+        <button class="user-chip" id="profileShortcut"><span class="avatar" id="avatar">A</span><span id="headerUser">André</span><span class="chevron">⌄</span></button>
+      </div>
+    </div>
+  </header>
+
+  <main class="content">
+    <section class="view active" id="view-home">
+      <div class="welcome-row"><div><p class="eyebrow" id="todayLabel"></p><h1>Olá, <span id="welcomeName">André</span> 👋</h1><p class="muted">Veja o resumo do almoxarifado.</p></div><div class="welcome-icon">📦</div></div>
+      <div class="search-hero"><span>⌕</span><input id="homeSearch" placeholder="Pesquise peça, código ou localização..."><button id="homeSearchBtn">Buscar</button></div>
+      <div class="section-heading"><div><h2>Visão geral</h2><p>Indicadores do estoque</p></div><span class="live-tag"><i></i> Atualizado agora</span></div>
+      <div class="stats-grid">
+        <button class="stat-card" data-act="stat" data-id="all"><div class="stat-icon blue">▦</div><span>Itens cadastrados</span><strong id="statItems">0</strong><small>Ver todo o estoque</small></button>
+        <button class="stat-card" data-act="stat" data-id="low"><div class="stat-icon orange">⚠</div><span>Estoque baixo</span><strong id="statLow">0</strong><small>Ver itens com atenção</small></button>
+        <button class="stat-card" data-act="stat" data-id="zero"><div class="stat-icon red">×</div><span>Sem estoque</span><strong id="statZero">0</strong><small>Ver itens zerados</small></button>
+        <button class="stat-card" data-act="stat" data-id="today"><div class="stat-icon green">↕</div><span>Movimentações hoje</span><strong id="todayMoves">0</strong><small>Ver movimentações de hoje</small></button>
+      </div>
+      <div class="section-heading"><div><h2>Acesso rápido</h2><p>O que deseja fazer?</p></div></div>
+      <div class="quick-grid">
+        <button class="quick-card" data-go="stock"><span class="quick-icon blue">⌕</span><b>Pesquisar estoque</b><small>Encontre uma peça</small></button>
+        <button class="quick-card" data-go="scanner"><span class="quick-icon violet">▦</span><b>Escanear QR Code</b><small>Consultar etiqueta</small></button>
+        <button class="quick-card" data-go="movement"><span class="quick-icon green">⇄</span><b>Entrada / Saída</b><small>Registrar movimentação</small></button>
+        <button class="quick-card" data-act="newPurchase"><span class="quick-icon orange">🛒</span><b>Solicitar compra</b><small>Repor materiais</small></button>
+        <button class="quick-card" data-go="equipment"><span class="quick-icon blue">⚙</span><b>Equipamentos</b><small>Peças e desenho explodido</small></button>
+        <button class="quick-card" data-go="loans"><span class="quick-icon orange">🧰</span><b>Empréstimos</b><small>Ferramentas emprestadas</small></button>
+      </div>
+      <div class="section-heading"><div><h2>Últimas movimentações</h2><p>Atividade recente no almoxarifado</p></div><button class="text-btn" data-go="history">Ver histórico →</button></div>
+      <div class="panel" id="recentMoves"></div>
+    </section>
+
+    <section class="view" id="view-stock">
+      <div class="page-heading"><div><p class="eyebrow">MATERIAIS</p><h1>Estoque</h1><p class="muted">Pesquise peças e consulte onde estão armazenadas.</p></div><button class="btn primary" data-act="newItem" data-perm="items">＋ Cadastrar peça</button></div>
+      <div class="filter-bar"><div class="search-box"><span>⌕</span><input id="stockSearch" placeholder="Nome, código, aplicação ou local..."></div><select id="stockFilter"><option value="all">Todos os materiais</option><option value="alert">Precisam de atenção</option><option value="low">Estoque baixo</option><option value="zero">Sem estoque</option></select></div>
+      <div class="result-count" id="resultCount">Materiais encontrados</div>
+      <div class="stock-list" id="stockList"></div>
+    </section>
+
+    <section class="view" id="view-detail">
+      <button class="back-link" data-back="stock">← Voltar</button>
+      <div id="itemDetail"></div>
+    </section>
+
+    <section class="view" id="view-scanner">
+      <div class="page-heading"><div><p class="eyebrow">LEITURA DE ETIQUETAS</p><h1>Escanear QR Code</h1><p class="muted">Aponte a câmera para a etiqueta da peça.</p></div></div>
+      <div class="scanner-card">
+        <div class="camera-frame" id="cameraFrame"><video id="cameraVideo" playsinline muted></video><div class="scan-corner tl"></div><div class="scan-corner tr"></div><div class="scan-corner bl"></div><div class="scan-corner br"></div><div class="scan-line"></div><div class="camera-symbol">▦</div><span>Área de leitura do QR Code</span></div>
+        <button class="btn primary full" id="startCamera" type="button">◎ Ativar câmera</button>
+        <p class="muted center tiny">A leitura pela câmera requer HTTPS e permissão do navegador.</p>
+        <div class="divider-label"><span>ou</span></div>
+        <div class="field"><label for="qrManual">Digite ou informe o código da etiqueta</label><div class="inline-input"><input id="qrManual" placeholder="Ex.: ROL-000125" autocapitalize="characters"><button class="btn secondary" id="lookupQr" type="button">Consultar</button></div></div>
+        <p id="scannerMessage" class="scanner-message"></p>
+      </div>
+      <div class="tip-card"><span>💡</span><div><b>Etiquetas</b><p>Abra uma peça no estoque e toque em “Etiqueta QR” para imprimir. Em Relatórios você imprime as etiquetas de todas as peças.</p></div></div>
+    </section>
+
+    <section class="view" id="view-movement">
+      <div class="page-heading"><div><p class="eyebrow">CONTROLE DE OPERAÇÕES</p><h1>Movimentação</h1><p class="muted">Registre entradas e retiradas de materiais.</p></div></div>
+      <div class="movement-tabs"><button class="selected" data-type="saida" data-perm="saida" type="button">↗ Saída</button><button data-type="entrada" data-perm="entrada" type="button">↙ Entrada</button></div>
+      <form id="movementForm" class="form-panel">
+        <input type="hidden" id="movementType" value="saida">
+        <div class="field"><label for="moveItem">Peça / Material *</label><select id="moveItem" required></select></div>
+        <div class="form-row"><div class="field"><label for="moveQty">Quantidade *</label><input id="moveQty" type="number" min="1" step="1" value="1" required></div><div class="field"><label for="moveLocation" id="moveLocLabel">Local de retirada</label><select id="moveLocation"></select></div></div>
+        <p class="balance-hint" id="moveBalance"></p>
+        <div id="newLocWrap" class="hidden"></div>
+        <div class="field"><label for="moveReason">Motivo / Aplicação</label><input id="moveReason" placeholder="Ex.: Manutenção da bomba 02"></div>
+        <div class="field"><label for="moveNote">Observações</label><textarea id="moveNote" rows="3" placeholder="Informações adicionais..."></textarea></div>
+        <div class="audit-preview"><span>✓</span><div><b>Registro de auditoria automático</b><small>Usuário, data, horário e saldo serão registrados.</small></div></div>
+        <button class="btn primary full" type="submit" id="moveSubmit">Confirmar movimentação</button>
+      </form>
+    </section>
+
+    <section class="view" id="view-purchases">
+      <div class="page-heading"><div><p class="eyebrow">REPOSIÇÃO DE MATERIAIS</p><h1>Solicitações de compra</h1><p class="muted">Acompanhe pedidos e solicite reposições.</p></div><button class="btn primary" data-act="newPurchase" data-perm="request">＋ Nova solicitação</button></div>
+      <div class="purchase-summary"><button class="sum-card" data-act="pfilter" data-id="open"><small>Pedidos em aberto</small><b id="sumOpen">0</b></button><button class="sum-card soon" data-act="pfilter" data-id="soon"><small>Próximos do vencimento</small><b id="sumSoon">0</b></button><button class="sum-card over" data-act="pfilter" data-id="overdue"><small>Vencidos</small><b id="sumOver">0</b></button></div>
+      <div class="filter-pills" id="purchasePills"><button class="active" data-f="all">Todas</button><button data-f="pend">Pendentes</button><button data-f="buy">Em compra</button><button data-f="done">Recebidas</button></div>
+      <div id="purchaseList" class="purchase-list"></div>
+    </section>
+
+    <section class="view" id="view-history">
+      <button class="back-link" data-back="home">← Voltar</button>
+      <div class="page-heading"><div><p class="eyebrow">RASTREABILIDADE</p><h1>Histórico</h1><p class="muted">Todas as entradas e saídas registradas.</p></div></div>
+      <div class="filter-bar"><div class="search-box"><span>⌕</span><input id="historySearch" placeholder="Buscar peça ou colaborador..."></div><select id="historyFilter"><option value="all">Todos</option><option value="saida">Saídas</option><option value="entrada">Entradas</option><option value="today">Somente hoje</option></select></div>
+      <div class="panel" id="historyList"></div>
+    </section>
+
+    <section class="view" id="view-equipment">
+      <div class="page-heading"><div><p class="eyebrow">APLICAÇÃO DE MATERIAIS</p><h1>Equipamentos</h1><p class="muted">Consulte quais peças são utilizadas em cada equipamento.</p></div><button class="btn primary" data-act="newEquip" data-perm="equip">＋ Cadastrar</button></div>
+      <div class="search-box"><span>⌕</span><input id="equipmentSearch" placeholder="Buscar equipamento..."></div>
+      <div class="equipment-list" id="equipmentList"></div>
+    </section>
+
+    <section class="view" id="view-equipdetail">
+      <button class="back-link" data-back="equipment">← Voltar</button>
+      <div id="equipDetail"></div>
+    </section>
+
+    <section class="view" id="view-profile">
+      <div class="profile-header"><div class="profile-avatar" id="profileAvatar">A</div><h1 id="profileName">André</h1><p id="profileRole">Administrador</p><span class="status-pill success">● Acesso ativo</span><div class="photo-actions"><button class="btn ghost sm" id="photoBtn" type="button">📷 Alterar foto</button><button class="btn ghost sm danger hidden" id="removePhoto" type="button">Remover foto</button></div></div>
+      <div class="profile-menu">
+        <button data-go="history"><span>▤</span><div><b>Histórico de movimentações</b><small>Consulte registros e responsáveis</small></div><i>›</i></button>
+        <button data-go="equipment"><span>⚙</span><div><b>Equipamentos</b><small>Peças e aplicações</small></div><i>›</i></button>
+        <button data-go="loans" data-perm="loans"><span>🧰</span><div><b>Empréstimos de ferramentas</b><small>Retirada, devolução e assinatura</small></div><i>›</i></button>
+        <button data-go="repairs" data-perm="repairs"><span>🔧</span><div><b>Conserto de equipamentos</b><small>Envio, dias em conserto e retorno</small></div><i>›</i></button>
+        <button data-go="categories" data-perm="items"><span>🗂</span><div><b>Categorias de peças</b><small>Criar, renomear ou excluir</small></div><i>›</i></button>
+        <button data-go="users" data-perm="users"><span>♙</span><div><b>Usuários e permissões</b><small>Gerenciar acessos (administrador)</small></div><i>›</i></button>
+        <button data-act="reports" data-perm="reports"><span>▥</span><div><b>Relatórios e backup</b><small>Inventário, movimentações, compras, impressão e CSV</small></div><i>›</i></button>
+        <button id="installBtn" class="hidden"><span>⬇</span><div><b>Instalar aplicativo</b><small>Adicionar à tela inicial ou ao computador</small></div><i>›</i></button>
+        <button data-act="changePin"><span>🔑</span><div><b>Alterar minha senha</b><small>Troque sua senha de acesso</small></div><i>›</i></button>
+        <button id="logoutButton" class="logout-row"><span>↪</span><div><b>Sair do aplicativo</b><small>Encerrar sua sessão</small></div><i>›</i></button>
+      </div>
+      <div class="version-note">Almoxarifado Manutenção · Dados na nuvem · funciona offline</div>
+    </section>
+
+    <section class="view" id="view-reports">
+      <button class="back-link" data-back="profile">← Voltar</button>
+      <div class="page-heading"><div><p class="eyebrow">CONTROLE E AUDITORIA</p><h1>Relatórios</h1><p class="muted">Gere, imprima ou exporte os relatórios do almoxarifado.</p></div></div>
+      <div class="form-panel rep-panel">
+        <div class="field"><label for="repType">Relatório</label><select id="repType"></select></div>
+        <div id="repDates">
+          <div class="form-row"><div class="field"><label for="repFrom">De</label><input type="date" id="repFrom"></div><div class="field"><label for="repTo">Até</label><input type="date" id="repTo"></div></div>
+          <div class="rep-quick"><button class="btn ghost sm" type="button" data-range="today">Hoje</button><button class="btn ghost sm" type="button" data-range="7">7 dias</button><button class="btn ghost sm" type="button" data-range="30">30 dias</button><button class="btn ghost sm" type="button" data-range="month">Este mês</button><button class="btn ghost sm" type="button" data-range="all">Tudo</button></div>
+        </div>
+        <div class="detail-actions sub"><button class="btn primary" id="repPrint" type="button">🖨 Imprimir / salvar em PDF</button><button class="btn secondary" id="repCsv" type="button">⇩ Exportar planilha (CSV)</button></div>
+      </div>
+      <div class="panel rep-preview" id="repPreview"></div>
+      <div class="form-panel rep-panel" style="margin-top:16px">
+        <h3 class="rep-sub">Etiquetas e backup</h3>
+        <div class="report-list">
+          <button class="report-btn" data-r="labels" type="button"><b>Imprimir etiquetas QR</b><small>Uma etiqueta por peça cadastrada</small></button>
+          <button class="report-btn" data-r="backup" data-perm="users" type="button"><b>Baixar backup completo</b><small>Arquivo JSON com todos os dados</small></button>
+          <button class="report-btn" data-r="restore" data-perm="users" type="button"><b>Restaurar backup</b><small>Substitui os dados deste aparelho</small></button>
+          <button class="report-btn danger" data-r="reset" data-perm="users" type="button"><b>Voltar aos dados de demonstração</b><small>Apaga tudo e recria o exemplo inicial</small></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="view-users">
+      <button class="back-link" data-back="profile">← Voltar</button>
+      <div class="page-heading"><div><p class="eyebrow">ADMINISTRAÇÃO</p><h1>Usuários</h1><p class="muted">Controle quem acessa o app e o que cada função pode fazer.</p></div><button class="btn primary" data-act="newUser">＋ Novo usuário</button></div>
+      <div class="user-list" id="userList"></div>
+      <div class="sec-head" style="margin-top:26px"><div><h3>Funções</h3><p class="field-hint">Crie funções e escolha o que cada uma pode fazer.</p></div><button class="btn secondary sm" data-act="newRole" data-perm="users">＋ Nova função</button></div>
+      <div class="user-list" id="roleList"></div>
+    </section>
+    <section class="view" id="view-loans">
+      <button class="back-link" data-back="profile">← Voltar</button>
+      <div class="page-heading"><div><p class="eyebrow">FERRAMENTAS</p><h1>Empréstimos</h1><p class="muted">Ferramentas emprestadas, com assinatura de quem retirou.</p></div><button class="btn primary" data-act="newLoan" data-perm="loans">＋ Novo empréstimo</button></div>
+      <div class="filter-pills" id="loanFilters"><button class="active" data-f="open">Em aberto</button><button data-f="done">Devolvidas</button><button data-f="all">Todas</button></div>
+      <div class="stock-list" id="loanList"></div>
+    </section>
+
+    <section class="view" id="view-repairs">
+      <button class="back-link" data-back="profile">← Voltar</button>
+      <div class="page-heading"><div><p class="eyebrow">MANUTENÇÃO</p><h1>Conserto</h1><p class="muted">Equipamentos e peças enviados para conserto externo.</p></div><button class="btn primary" data-act="newRepair" data-perm="repairs">＋ Enviar para conserto</button></div>
+      <div class="filter-pills" id="repairFilters"><button class="active" data-f="open">Em conserto</button><button data-f="done">Retornados</button><button data-f="all">Todos</button></div>
+      <div class="stock-list" id="repairList"></div>
+    </section>
+
+    <section class="view" id="view-categories">
+      <button class="back-link" data-back="profile">← Voltar</button>
+      <div class="page-heading"><div><p class="eyebrow">ADMINISTRAÇÃO</p><h1>Categorias</h1><p class="muted">Crie, renomeie ou exclua as categorias de peças.</p></div><button class="btn primary" data-act="newCat" data-perm="items">＋ Nova categoria</button></div>
+      <div class="user-list" id="catList"></div>
+      <div class="tip-card wide"><span>💡</span><div><b>Excluir categoria</b><p>Se houver peças nela, o app pede para mover essas peças para outra categoria antes de excluir.</p></div></div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-go="home"><span>⌂</span><small>Início</small></button>
+    <button class="nav-item" data-go="stock"><span>▦</span><small>Estoque</small></button>
+    <button class="nav-item scan-nav" data-go="scanner"><span>▣</span><small>QR Code</small></button>
+    <button class="nav-item" data-go="equipment"><span>⚙</span><small>Equipamentos</small></button>
+    <button class="nav-item" data-go="purchases"><span>🛒</span><small>Compras</small></button>
+  </nav>
+</div>
+
+<div class="modal hidden" id="modal"><div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-head"><h2 id="modalTitle"></h2><button class="icon-btn" id="modalClose" type="button" aria-label="Fechar">✕</button></div><div id="modalBody"></div></div></div>
+<div class="lightbox hidden" id="lightbox"><div class="lb-bar"><span class="lb-title"></span><button class="icon-btn" id="lbClose" type="button" aria-label="Fechar">✕</button></div><div class="lb-stage"><img alt=""></div></div>
+<div id="printArea"></div>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
+<script src="db.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
